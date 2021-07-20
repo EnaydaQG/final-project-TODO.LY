@@ -1,0 +1,12 @@
+{
+  "name": "projecttodo.ly",
+  "version": "1.0.0",
+  "description": "the project is in postman newman and jenkins",
+  "scripts": {
+    "api-tests-production": "newman run tests/todo.ly.postman_collection.json"
+  },
+  "author": "Enayda QG",
+  "dependencies": {
+    "newman": "^5.2.4"
+  }
+}

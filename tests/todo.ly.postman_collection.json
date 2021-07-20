@@ -1,0 +1,560 @@
+{
+	"info": {
+		"_postman_id": "b05ca7b9-cbee-47d2-bf85-f58778ca6d90",
+		"name": "todo.ly",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user API methods",
+			"item": [
+				{
+					"name": "CREATE a new user - POST /wtih required parameters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"eval(pm.environment.get(\"tests\"))();\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"email\", jsonData.Email);\r",
+									"pm.environment.set(\"fullName\", jsonData.FullName);\r",
+									"pm.environment.set(\"id\", jsonData.Id);\r",
+									"\r",
+									"pm.test(\"the new user is created successfully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User withemail address already exists\",function (){\r",
+									"\r",
+									"    pm.expect(pm.response.text()).to.include(\"dsgdfhgfjhjssss fghfg\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var test = () =>{",
+									"    pm.test(\"Response time is less than 400ms\", function () {",
+									"        pm.expect(pm.response.responseTime).to.be.below(400);",
+									"    });",
+									"",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"No hay mensajes de error\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"ErrorMessage\");",
+									"    });",
+									"}",
+									"",
+									"pm.environment.set(\"tests\", test.toString());",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Email\": \"user222@email.com\",\n    \"FullName\": \"dsgdfhgfjhjssss fghfg\",\n    \"Password\": {{password}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL-user}}.json",
+							"host": [
+								"{{URL-user}}",
+								"json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE a new user - POST /User with all parameters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"the new user with all atributes is created successfully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+									"});\r",
+									"pm.test(\"verified that user is created successfully\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Id).to.be.a(\"number\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n    \"Id\": 676817,\n    \"Email\": \"userp15@email.com\",\n    \"Password\": \"null\",\n    \"FullName\": \"dsgdfhgfjhj fghfg\",\n    \"TimeZone\": 0,\n    \"IsProUser\": false,\n    \"DefaultProjectId\": 3882070,\n    \"AddItemMoreExpanded\": false,\n    \"EditDueDateMoreExpanded\": false,\n    \"ListSortType\": 0,\n    \"FirstDayOfWeek\": 0,\n    \"NewTaskDueDate\": -1,\n    \"TimeZoneId\": \"Pacific Standard Time\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL-user}}.json",
+							"host": [
+								"{{URL-user}}",
+								"json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET user - user/pasword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The information of the created user was obtained\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"validate the required marameters \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Email).to.eql(\"user222@email.com\");\r",
+									"    pm.expect(jsonData.FullName).to.eql(\"dsgdfhgfjhjssss fghfg\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "null",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "userp15@email.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL-user}}.json",
+							"host": [
+								"{{URL-user}}",
+								"json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE /User/Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"created user is updated successfully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\" name has string\", function () {\r",
+									"    pm.response.to.have.status(\"dsgdfhgfjhjssss fghfg\");\r",
+									"});\r",
+									"pm.test(\"verified that user is created successfully\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Id).to.be.a(\"number\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "pASswoRd1117",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user0022@email.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"Email\": \"user222@email.com\",\n        \"FullName\": \"Joelsito Blowenger\"\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL-user}}/0.json",
+							"host": [
+								"{{URL-user}}"
+							],
+							"path": [
+								"0.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"the created user is deleted successfully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"verified that user is created successfully\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Id).to.be.a(\"number\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user222@email.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "pASswoRd1117",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL-user}}/0.json",
+							"host": [
+								"{{URL-user}}"
+							],
+							"path": [
+								"0.json"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "User Object stores basic information of the User itself, and some settings that closely belongs to the user like Timezone.\n\nUser API Methods\nCreate User\nGet User\nUpdate User\nDelete User"
+		},
+		{
+			"name": "Project API methods",
+			"item": [
+				{
+					"name": "get projects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"eval(pm.environment.get(\"tests\"))();\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"email\", jsonData.Email);\r",
+									"pm.environment.set(\"fullName\", jsonData.FullName);\r",
+									"pm.environment.set(\"id\", jsonData.Id);\r",
+									"\r",
+									"    pm.test(\"Response time is less than 400ms\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Displays all created projects of account successfully\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"does not display an error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"ErrorMessage\");\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var test = () =>{",
+									"    pm.test(\"Response time is less than 400ms\", function () {",
+									"        pm.expect(pm.response.responseTime).to.be.below(400);",
+									"    });",
+									"",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"No hay mensajes de error\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"ErrorMessage\");",
+									"    });",
+									"}",
+									"",
+									"pm.environment.set(\"tests\", test.toString());",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{email}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cecilia777",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODO.LY}}projects.json",
+							"host": [
+								"{{TODO.LY}}projects",
+								"json"
+							]
+						},
+						"description": "all projects to todo.ly"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE  projects BY id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{email}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cecilia777",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ProjectObject\": {\n        \"Icon\": \"5\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://todo.ly/api/projects/3881744.json",
+							"protocol": "https",
+							"host": [
+								"todo",
+								"ly"
+							],
+							"path": [
+								"api",
+								"projects",
+								"3881744.json"
+							]
+						},
+						"description": "all projects to todo.ly"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE  projects BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"    pm.test(\"Response time is less than 400ms\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Displays id project of account successfully\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"does not display an error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"ErrorMessage\");\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{email}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cecilia777",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ProjectObject\": {\n        \"Icon\": \"5\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODO.LY}}projects/3881744.json",
+							"host": [
+								"{{TODO.LY}}projects"
+							],
+							"path": [
+								"3881744.json"
+							]
+						},
+						"description": "all projects to todo.ly"
+					},
+					"response": []
+				},
+				{
+					"name": "POST projects (JSON)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"    pm.test(\"Response time is less than 400ms\", function () {\r",
+									"        pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Displays id project of account successfully\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"does not display an error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"ErrorMessage\");\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{EMAIL}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cecilia777",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n    \n    \"Content\": \"PROJECTS todo QUIMESTRY\",\n    \"ItemsCount\": 0,\n    \"Icon\": 2,\n    \"ItemType\": 1,\n    \"ParentId\": null,\n    \"Collapsed\": false,\n    \"ItemOrder\": 20,\n    \"Children\": [],\n    \"IsProjectShared\": false,\n    \"ProjectShareOwnerName\": null,\n    \"ProjectShareOwnerEmail\": null,\n    \"IsShareApproved\": false,\n    \"IsOwnProject\": true,\n    \"LastSyncedDateTime\": \"/Date(1610566574295)/\",\n    \"LastUpdatedDate\": \"/Date(1610566574280)/\",\n    \"Deleted\": false,\n    \"SyncClientCreationId\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODO.LY}}projects.json",
+							"host": [
+								"{{TODO.LY}}projects",
+								"json"
+							]
+						},
+						"description": "all projects to todo.ly"
+					},
+					"response": []
+				}
+			],
+			"description": "Project holds a number of items. Every Item in the system belongs to a Project. If an Item doesn’t have a Project assigned to it, it only displayed in the Inbox. Projects can be in hierarchy containing other projects.\n\nProjects API Methods\nGet All Projects\nCreate New Project\nGet Project By Id\nUpdate Project By Id\nDelete Project By Id\nGet Items of a Project\nGet Done Items of a Project"
+		}
+	]
+}
