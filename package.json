@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "the project is in postman newman and jenkins",
   "scripts": {
-    "api-tests-production": "newman run tests/todo.ly.postman_collection.json"
+    "api-tests-production": "newman run tests/todo.ly.postman_collection.json --reporters cli,junit --reporter-junit-export newman.xml"
   },
   "author": "Enayda QG",
   "dependencies": {
